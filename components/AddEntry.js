@@ -1,6 +1,16 @@
 import React, {Component} from 'react';
-import {View, TouchableOpacity, Text} from 'react-native';
-import {getMetricMetaInfo, timeToString, getDailyReminderValue} from '../utils/helpers';
+import {
+    View,
+    TouchableOpacity,
+    Text,
+    StyleSheet,
+    Platform,
+} from 'react-native';
+import {
+    getMetricMetaInfo,
+    timeToString,
+    getDailyReminderValue,
+} from '../utils/helpers';
 import UdaciSlider from './UdaciSlider';
 import UdaciStepper from './UdaciStepper';
 import DateHeader from './DateHeader';
@@ -9,13 +19,26 @@ import TextButton from './TextButton';
 import {submitEntry, removeEntry} from '../utils/API';
 import {connect} from 'react-redux';
 import {addEntry} from '../actions/index';
+import {
+    purple,
+    gray,
+    white,
+    red,
+    orange,
+    blue,
+    lightPurp,
+    pink,
+} from '../utils/colors';
 
 function SubmitBtn({onPress}) {
     return (
         <TouchableOpacity
             onPress={onPress}
+            style={Platform.OS === 'ios'
+                ? styles.submitIos
+                : styles.submitAndroid}
         >
-            <Text>
+            <Text style={styles.submitText}>
                 SUBMIT
             </Text>
         </TouchableOpacity>
@@ -68,7 +91,7 @@ class AddEntry extends Component {
         const entry = this.state;
 
         this.props.addEntry({
-            [key]: entry
+            [key]: entry,
         });
 
         this.setState(() => ({
@@ -86,7 +109,7 @@ class AddEntry extends Component {
         const key = timeToString();
 
         this.props.addEntry({
-            [key]: getDailyReminderValue()
+            [key]: getDailyReminderValue(),
         });
 
         removeEntry(key);
@@ -97,9 +120,9 @@ class AddEntry extends Component {
 
         if (this.props.alreadyLogged) {
             return (
-                <View>
+                <View style={styles.alreadyLogged}>
                     <Ionicons
-                        name='md-happy'
+                        name={Platform.OS === 'ios' ? 'ios-happy' : 'md-happy'}
                         size={100}
                     />
                     <Text>
@@ -111,14 +134,14 @@ class AddEntry extends Component {
         }
 
         return (
-            <View>
+            <View style={styles.main}>
                 <DateHeader date={(new Date()).toLocaleDateString()}/>
                 {Object.keys(metaInfo).map((key) => {
                     const {getIcon, type, ...rest} = metaInfo[key];
                     const value = this.state[key];
 
                     return (
-                        <View key={key}>
+                        <View key={key} style={styles.metrica}>
                             {getIcon()}
                             {type === 'slider'
                                 ? <UdaciSlider
@@ -141,20 +164,61 @@ class AddEntry extends Component {
     }
 }
 
+const styles = StyleSheet.create({
+    alreadyLogged: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    main: {
+        flex: 1,
+        justifyContent: 'space-between',
+        paddingHorizontal: 20,
+        paddingVertical: 40
+    },
+    metrica: {
+        flexDirection: 'row',
+        alignItems: 'center'
+    },
+    submitIos: {
+        backgroundColor: purple,
+        borderRadius: 6,
+        height: 40,
+        width: 200,
+        alignItems: 'center',
+        justifyContent: 'center',
+        alignSelf: 'center',
+        marginBottom: 20
+    },
+    submitAndroid: {
+        backgroundColor: purple,
+        borderRadius: 3,
+        height: 40,
+        width: 150,
+        alignSelf: 'center',
+        marginBottom: 20
+    },
+    submitText: {
+        color: white,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+});
+
 const mapStateToProps = (state) => {
     const key = timeToString();
     return {
-        alreadyLogged: state[key] && typeof state[key].today === 'undefined'
-    }
+        alreadyLogged: state[key] && typeof state[key].today === 'undefined',
+    };
 
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
         addEntry: (entry) => {
-            dispatch(addEntry(entry))
-        }
-    }
+            dispatch(addEntry(entry));
+        },
+    };
 
 };
 
