@@ -3,11 +3,9 @@ import { View, StyleSheet } from 'react-native';
 import { FontAwesome, MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import {
     purple,
-    gray,
     white,
     red,
     orange,
-    blue,
     lightPurp,
     pink
 } from './colors';
