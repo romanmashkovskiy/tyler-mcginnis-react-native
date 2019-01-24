@@ -10,37 +10,37 @@ import {timeToString, getDailyReminderValue} from '../utils/helpers';
 
 class History extends Component {
     componentDidMount() {
-        const {addEntry, dispatch} = this.props;
-        fetchCalendarResults().
-            then((entries) => dispatch(receiveEntries(entries))).
-            then(({entries}) => {
-                if (!entries[timeToString()]) {
-                    dispatch(addEntry({
-                        [timeToString()]: getDailyReminderValue(),
-                    }));
-                }
-            });
+        const {receiveEntries, addEntry} = this.props;
+        fetchCalendarResults().then((entries) =>
+            receiveEntries(entries)
+        ).then(res => {
+            if (!res.payload[timeToString()]) {
+                addEntry({
+                    [timeToString()]: getDailyReminderValue(),
+                });
+            }
+        });
     }
 
     render() {
         return (
             <View>
-                <Text>{JSON.stringify(this.props)}</Text>
+                <Text>{JSON.stringify(this.props.entries)}</Text>
             </View>
         );
     }
 }
 
-const mapStateToProps = (entries) => {
+const mapStateToProps = (state) => {
     return {
-        entries,
+        entries: state,
     };
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
         receiveEntries: (entries) => {
-            dispatch(receiveEntries(entries));
+            return dispatch(receiveEntries(entries));
         },
         addEntry: (entry) => {
             dispatch(addEntry(entry));
@@ -48,4 +48,4 @@ const mapDispatchToProps = (dispatch) => {
     };
 };
 
-export default connect(mapStateToProps, null)(History);
+export default connect(mapStateToProps, mapDispatchToProps)(History);
