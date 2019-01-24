@@ -21,13 +21,7 @@ import {connect} from 'react-redux';
 import {addEntry} from '../actions/index';
 import {
     purple,
-    gray,
     white,
-    red,
-    orange,
-    blue,
-    lightPurp,
-    pink,
 } from '../utils/colors';
 
 function SubmitBtn({onPress}) {
@@ -196,6 +190,8 @@ const styles = StyleSheet.create({
         height: 40,
         width: 150,
         alignSelf: 'center',
+        alignItems: 'center',
+        justifyContent: 'center',
         marginBottom: 20
     },
     submitText: {
