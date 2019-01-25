@@ -12,6 +12,7 @@ import History from './components/History';
 import {
     createMaterialTopTabNavigator,
     createAppContainer,
+    createStackNavigator,
 } from 'react-navigation';
 import {
     FontAwesome,
@@ -23,8 +24,9 @@ import {
     gray,
 } from './utils/colors';
 import {Constants} from 'expo';
+import EntryDetail from './components/EntryDetail';
 
-const Tabs = createAppContainer(createMaterialTopTabNavigator({
+const Tabs = createMaterialTopTabNavigator({
     History: {
         screen: History,
         navigationOptions: {
@@ -52,6 +54,24 @@ const Tabs = createAppContainer(createMaterialTopTabNavigator({
         },
         showIcon: true,
     },
+});
+
+const MainNavigator = createAppContainer(createStackNavigator({
+    Home: {
+        screen: Tabs,
+        navigationOptions: {
+            header: null
+        }
+    },
+    EntryDetail: {
+        screen: EntryDetail,
+        navigationOptions: {
+            headerTintColor: white,
+            headerStyle: {
+                backgroundColor: purple
+            }
+        }
+    }
 }));
 
 const StatusBarCustom = ({backgroundColor, ...rest}) => (
@@ -65,8 +85,9 @@ export default class App extends React.Component {
         return (
             <Provider store={createStore(reducer)}>
                 <View style={{flex: 1}}>
-                    <StatusBarCustom backgroundColor={purple} barStyle={'light-content'}/>
-                    <Tabs/>
+                    <StatusBarCustom backgroundColor={purple}
+                                     barStyle={'light-content'}/>
+                    <MainNavigator/>
                 </View>
             </Provider>
         );
