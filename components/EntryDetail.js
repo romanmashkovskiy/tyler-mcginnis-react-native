@@ -1,10 +1,25 @@
-import React from 'react';
+import React, {Component} from 'react';
 import {View, Text} from 'react-native';
 
-export default ({navigation}) => (
-    <View>
-        <Text>
-            Entry Detail - {navigation.state.params.entryId}
-        </Text>
-    </View>
-);
+class EntryDetail extends Component {
+
+    static navigationOptions = ({navigation}) => {
+        const {entryId} = navigation.state.params;
+
+        return {
+            title: entryId,
+        };
+    };
+
+    render() {
+        return (
+            <View>
+                <Text>
+                    Entry Detail - {this.props.navigation.state.params.entryId}
+                </Text>
+            </View>
+        );
+    }
+}
+
+export default EntryDetail;
