@@ -14,8 +14,13 @@ import UdacifitnessCalendar from 'udacifitness-calendar';
 import DateHeader from './DateHeader';
 import {white} from '../utils/colors';
 import MetricCard from './MetricCard';
+import {AppLoading} from 'expo';
 
 class History extends Component {
+    state = {
+        isLoading: true,
+    };
+
     componentDidMount() {
         const {receiveEntries, addEntry} = this.props;
         fetchCalendarResults().then((entries) => {
@@ -26,7 +31,7 @@ class History extends Component {
                     [timeToString()]: getDailyReminderValue(),
                 });
             }
-        });
+        }).then(() => {this.setState(() => ({isLoading: false}))});
     }
 
     renderItem = ({today, ...metrics}, formattedDate, key) => {
@@ -57,6 +62,14 @@ class History extends Component {
 
     render() {
         const {entries} = this.props;
+        const {isLoading} = this.state;
+
+        if (isLoading) {
+            return (
+                <AppLoading/>
+            );
+        }
+
         return (
             <UdacifitnessCalendar
                 items={entries}
