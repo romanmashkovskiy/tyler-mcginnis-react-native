@@ -2,18 +2,23 @@ import React, {Component} from 'react';
 import {
     View,
     Text,
+    StyleSheet,
+    TouchableOpacity,
+    Platform,
 } from 'react-native';
 import {connect} from 'react-redux';
 import {fetchCalendarResults} from '../utils/API';
 import {receiveEntries, addEntry} from '../actions';
 import {timeToString, getDailyReminderValue} from '../utils/helpers';
 import UdacifitnessCalendar from 'udacifitness-calendar';
+import DateHeader from './DateHeader';
+import {white} from '../utils/colors';
 
 class History extends Component {
     componentDidMount() {
         const {receiveEntries, addEntry} = this.props;
         fetchCalendarResults().then((entries) =>
-            receiveEntries(entries)
+            receiveEntries(entries),
         ).then(res => {
             if (!res.payload[timeToString()]) {
                 addEntry({
@@ -25,19 +30,27 @@ class History extends Component {
 
     renderItem = ({today, ...metrics}, formattedDate, key) => {
         return (
-            <View>
+            <View style={styles.item}>
                 {today
-                    ? <Text>{JSON.stringify(today)}</Text>
-                    : <Text>{JSON.stringify(metrics)}</Text>}
+                    ?
+                    <View>
+                        <DateHeader date={formattedDate}/>
+                        <Text style={styles.text}>{today}</Text>
+                    </View>
+                    :
+                    <TouchableOpacity onPress={() => {}}>
+                        <Text>{JSON.stringify(metrics)}</Text>
+                    </TouchableOpacity>}
             </View>
         );
     };
 
     renderEmptyDate = (formattedDate) => {
         return (
-          <View>
-              <Text>No data for this day</Text>
-          </View>
+            <View style={styles.item}>
+                <DateHeader date={formattedDate}/>
+                <Text style={styles.text}>No data for this day</Text>
+            </View>
         );
     };
 
@@ -52,6 +65,20 @@ class History extends Component {
         );
     }
 }
+
+const styles = StyleSheet.create({
+    item: {
+        backgroundColor: white,
+        borderRadius: Platform.OS === 'ios' ? 12 : 3,
+        paddingVertical: 10,
+        paddingHorizontal: 10,
+        margin: 10,
+    },
+    text: {
+        fontSize: 20,
+        marginVertical: 10
+    }
+});
 
 const mapStateToProps = (state) => {
     return {

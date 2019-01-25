@@ -164,6 +164,6 @@ export function timeToString (time = Date.now()) {
 
 export const getDailyReminderValue = () => {
     return {
-        today: 'Don\'t forget to log your data for today'
+        today: "Don't forget to log your data for today"
     }
 };
