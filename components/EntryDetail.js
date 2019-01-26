@@ -32,8 +32,8 @@ class EntryDetail extends Component {
     reset = () => {
         const {remove, goBack, entryId} = this.props;
         remove();
-        removeEntry(entryId);
         goBack();
+        removeEntry(entryId);
     };
 
     render() {
@@ -75,9 +75,11 @@ const mapDispatchToProps = (dispatch, {navigation}) => {
     return {
         remove: () => {
             dispatch(addEntry(
-                {[key]: entryId === timeToString()
+                {
+                    [entryId]: entryId === timeToString()
                         ? getDailyReminderValue()
-                        : null}
+                        : null
+                }
             ))
         },
         goBack: () => navigation.goBack()
