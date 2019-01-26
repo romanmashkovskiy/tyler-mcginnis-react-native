@@ -23,6 +23,7 @@ import {
     purple,
     white,
 } from '../utils/colors';
+import {NavigationActions} from 'react-navigation';
 
 function SubmitBtn({onPress}) {
     return (
@@ -97,6 +98,8 @@ class AddEntry extends Component {
         }));
 
         submitEntry(entry, key);
+
+        this.toHome();
     };
 
     reset = () => {
@@ -107,6 +110,15 @@ class AddEntry extends Component {
         });
 
         removeEntry(key);
+
+        this.toHome();
+    };
+
+    toHome = () => {
+        // this.props.navigation.goBack('AddEntry'); //analog
+        this.props.navigation.dispatch(NavigationActions.back({
+            key: 'AddEntry',
+        }));
     };
 
     render() {
