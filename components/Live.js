@@ -1,13 +1,12 @@
 import React, {Component} from 'react';
 import {View, Text, ActivityIndicator, TouchableOpacity, StyleSheet} from 'react-native';
 import {Entypo} from '@expo/vector-icons';
-import {purple, white} from '../utils/colors';
-import TextButton from "./TextButton";
+import {purple, white, blue} from '../utils/colors';
 
 class Live extends Component {
     state = {
         coords: null,
-        status: 'denied',
+        status: 'granted',
         direction: ''
     };
 
@@ -46,16 +45,63 @@ class Live extends Component {
         }
 
         return (
-            <View>
-                <Text>Live</Text>
-                <Text>{JSON.stringify(this.state)}</Text>
+            <View style={styles.container}>
+                <View style={styles.directionContainer}>
+                    <Text style={styles.directionHeader}>You are heading</Text>
+                    <Text style={styles.direction}>North</Text>
+                </View>
+                <View style={styles.metricsContainer}>
+                    <View style={styles.metricContainer}>
+                        <Text style={styles.metricText}>Altitude</Text>
+                        <Text style={styles.metricText}>200 Feet</Text>
+                    </View>
+                    <View style={styles.metricContainer}>
+                        <Text style={styles.metricText}>Speed</Text>
+                        <Text style={styles.metricText}>300 MPH</Text>
+                    </View>
+                </View>
             </View>
         );
     }
 }
 
 const styles = StyleSheet.create({
-    container: {},
+    container: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+
+    },
+    directionContainer: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    directionHeader: {
+        fontSize: 40,
+    },
+    direction: {
+        fontSize: 80,
+        color: purple
+    },
+    metricsContainer: {
+        backgroundColor: purple,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+    },
+    metricContainer: {
+        backgroundColor: blue,
+        alignItems: 'center',
+        justifyContent: 'center',
+        flex: 1,
+        marginVertical: 10,
+        marginHorizontal: 10,
+        paddingVertical: 25,
+    },
+    metricText: {
+        color: white,
+        fontSize: 30
+    },
     center: {
         flex: 1,
         alignItems: 'center',
@@ -69,6 +115,7 @@ const styles = StyleSheet.create({
     },
     buttonText: {
         color: white,
+        fontSize: 20,
     }
 });
 
