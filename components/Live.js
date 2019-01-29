@@ -8,7 +8,7 @@ import {calculateDirection} from '../utils/helpers';
 class Live extends Component {
     state = {
         coords: null,
-        status: 'granted',
+        status: null,
         direction: ''
     };
 
@@ -16,8 +16,9 @@ class Live extends Component {
         Permissions.getAsync(Permissions.LOCATION)
             .then(({status}) => {
                 if (status === 'granted') {
-                    this.setLocation();
+                    return this.setLocation();
                 }
+                console.log(status);
                 this.setState(() => ({status}));
             })
             .catch(err => {
@@ -27,7 +28,17 @@ class Live extends Component {
     }
 
     askPermission = () => {
-
+        Permissions.askAsync(Permissions.LOCATION)
+            .then(({status}) => {
+                if (status === 'granted') {
+                    return this.setLocation();
+                }
+                this.setState(() => ({status}));
+            })
+            .catch(err => {
+                console.warn('Error asking permission', err);
+                this.setState(() => ({status: 'undetermined'}));
+            })
     };
 
     setLocation = () => {
@@ -80,16 +91,16 @@ class Live extends Component {
             <View style={styles.container}>
                 <View style={styles.directionContainer}>
                     <Text style={styles.directionHeader}>You are heading</Text>
-                    <Text style={styles.direction}>North</Text>
+                    <Text style={styles.direction}>{direction}</Text>
                 </View>
                 <View style={styles.metricsContainer}>
                     <View style={styles.metricContainer}>
                         <Text style={styles.metricText}>Altitude</Text>
-                        <Text style={styles.metricText}>200 Feet</Text>
+                        <Text style={styles.metricText}>{coords.altitude} meters</Text>
                     </View>
                     <View style={styles.metricContainer}>
                         <Text style={styles.metricText}>Speed</Text>
-                        <Text style={styles.metricText}>300 MPH</Text>
+                        <Text style={styles.metricText}>{coords.speed} m/s</Text>
                     </View>
                 </View>
             </View>
