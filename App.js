@@ -25,6 +25,7 @@ import {
 } from './utils/colors';
 import {Constants} from 'expo';
 import EntryDetail from './components/EntryDetail';
+import Live from './components/Live';
 
 const Tabs = createMaterialTopTabNavigator({
     History: {
@@ -41,6 +42,14 @@ const Tabs = createMaterialTopTabNavigator({
             title: 'add entry',
             tabBarIcon: ({tintColor}) =>
                 <FontAwesome name='plus-square' size={30} color={tintColor}/>,
+        },
+    },
+    Live: {
+        screen: Live,
+        navigationOptions: {
+            title: 'live',
+            tabBarIcon: ({tintColor}) =>
+                <Ionicons name='ios-speedometer' size={30} color={tintColor}/>,
         },
     },
 }, {
