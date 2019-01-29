@@ -26,6 +26,7 @@ import {
 import {Constants} from 'expo';
 import EntryDetail from './components/EntryDetail';
 import Live from './components/Live';
+import {setLocalNotification} from './utils/helpers';
 
 const Tabs = createMaterialTopTabNavigator({
     History: {
@@ -90,6 +91,10 @@ const StatusBarCustom = ({backgroundColor, ...rest}) => (
 );
 
 export default class App extends React.Component {
+    componentDidMount() {
+        setLocalNotification();
+    }
+
     render() {
         return (
             <Provider store={createStore(reducer)}>
