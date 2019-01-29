@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import {View, Text, ActivityIndicator, TouchableOpacity, StyleSheet} from 'react-native';
 import {Entypo} from '@expo/vector-icons';
 import {purple, white, blue} from '../utils/colors';
+import {Location, Permissions} from 'expo';
+import {calculateDirection} from '../utils/helpers';
 
 class Live extends Component {
     state = {
@@ -10,8 +12,38 @@ class Live extends Component {
         direction: ''
     };
 
+    componentDidMount() {
+        Permissions.getAsync(Permissions.LOCATION)
+            .then(({status}) => {
+                if (status === 'granted') {
+                    this.setLocation();
+                }
+                this.setState(() => ({status}));
+            })
+            .catch(err => {
+                console.warn('Error getting permissions', err);
+                this.setState(() => ({status: 'undetermined'}));
+            })
+    }
+
     askPermission = () => {
 
+    };
+
+    setLocation = () => {
+        Location.watchPositionAsync({
+            accuracy: 2,
+            timeInterval: 1000,
+            distanceInterval: 2
+        }, ({coords}) => {
+            const {direction} = this.state;
+
+            this.setState(() => ({
+                coords,
+                status: 'granted',
+                direction: calculateDirection(coords.heading)
+            }))
+        })
     };
 
     render() {
